@@ -1,0 +1,90 @@
+# MidScene Android 分类筛选功能自动化测试脚本
+# 测试分类筛选不同分类并选择专辑的完整流程
+
+# AI代理配置
+agent:
+  testId: "android-category-filter-test"
+  groupName: "Android 分类筛选功能测试套件"
+  groupDescription: "测试Android平台分类筛选、条件变更和专辑选择的功能流程"
+  generateReport: true
+  autoPrintReportMsg: true
+  reportFileName: "android-category-filter-report"
+  replanningCycleLimit: 25
+  aiActContext: "这是Android平台的分类筛选测试场景，包含分类选择、筛选条件变更、专辑列表验证等功能。假设应用已安装并登录成功。"
+
+# Android环境配置
+android:
+  # 设备ID，实际使用时需要替换为真实设备ID
+  deviceId: "a23456ae"  # 模拟器ID或真实设备ID
+  # # 应用启动配置
+  # launch:
+  #   # 应用包名，实际使用时需要替换
+  #   appPackage: "com.example.aiassistant"
+  #   # 应用启动Activity
+  #   appActivity: "com.example.aiassistant.MainActivity"
+  # # 等待应用启动超时
+  # launchTimeout: 30000
+  # # ADB命令超时
+  # adbTimeout: 15000
+
+# 测试任务定义
+tasks:
+  # 任务4: 筛选不同的分类
+  - name: "basic_4: 筛选不同的分类"
+    continueOnNetworkIdleError: false
+    flow:
+      # 步骤1: 首页点击"全部"按钮
+      - aiTap: "点击首页的'全部'按钮，进入分类首页"
+        deepThink: true
+      
+      - aiWaitFor: 页面加载完成
+        timeout: 3000
+      
+      # 验证分类首页元素
+      - aiAssert: "分类首页标题应为'全部内容'，并显示以下分类：有声书、音乐、娱乐、相声评书、儿童"
+        errorMessage: "分类首页元素显示异常或分类不完整"
+        name: "check_category_homepage"
+      
+      # 步骤2: 选择分类"相声评书"
+      - aiTap: "点击'相声评书'分类选项，进入对应分类页面"
+        deepThink: true
+      
+      - sleep: 1000
+      
+      # 验证相声评书分类页面
+      - aiAssert: "已成功跳转至相声评书分类页面，默认排序方式为综合排序"
+        errorMessage: "相声评书分类切换失败或默认排序异常"
+        name: "check_crosstalk_category"
+      
+      # 步骤3: 更改筛选条件为"播放最多"+"小品"
+      - aiTap: "点击排序筛选按钮，选择'播放最多'排序方式"
+        deepThink: true
+      
+      - sleep: 1000
+      
+      - aiTap: "点击内容类型筛选按钮，选择'小品'子分类"
+        deepThink: true
+      
+      - sleep: 1000
+      
+      # 验证筛选条件生效
+      - aiAssert: "筛选条件已生效，专辑列表已根据'播放最多+小品'条件更新"
+        errorMessage: "筛选条件未生效，专辑列表未更新"
+        name: "check_filter_effect"
+      
+      # 步骤4: 选择排序第一的专辑卡片并点击
+      - aiTap: "点击专辑列表中排序第一的专辑卡片"
+        deepThink: true
+      
+      - aiWaitFor: 页面加载完成
+        timeout: 3000
+      
+      # 验证专辑详情页跳转
+      - aiAssert: "已成功跳转至选中专辑的详情页面"
+        errorMessage: "专辑详情页跳转失败"
+        name: "check_album_detail_jump"
+
+# 测试完成
+  - name: "测试完成"
+    flow:
+      - ai: "Android 分类筛选功能测试全部完成，返回到应用首页"

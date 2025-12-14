@@ -1,0 +1,26 @@
+# 日志文件
+midscene_run/log/
+
+# 输出文件
+midscene_run/output/
+
+# 报告文件
+midscene_run/report/
+
+# 环境变量文件
+.env
+*.env
+
+# Node modules
+node_modules/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# IDE 文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
