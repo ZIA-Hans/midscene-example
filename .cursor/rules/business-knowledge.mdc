@@ -22,3 +22,57 @@ alwaysApply: true
 - **入口**: https://m.ximalaya.com/gatekeeper/aiot-vh5-common/h5?appKey=<appKey>
     - appKey应为测试人员填入，默认为eeed09e6ef7447c4b04724747a06f74a
 - **视口大小**: 375 * 667
+---
+
+# 用例生成规则
+
+## 多平台用例生成规则
+
+当根据测试用例（JSON 或其他格式）生成 MidScene YAML 用例时，**必须**遵循以下规则：
+
+### 1. 平台识别与用例数量
+
+根据产品线的 **平台** 配置，自动确定需要生成的用例数量：
+
+| 产品线 | 平台配置 | 生成用例数量 | 文件命名规则 |
+|--------|----------|-------------|-------------|
+| 抖音小程序 | android / ios | 2个 | `<用例名>-android.yaml`, `<用例名>-ios.yaml` |
+| 喜马拉雅穿戴App | android / ios | 2个 | `<用例名>-android.yaml`, `<用例名>-ios.yaml` |
+| 通用会员SDK | web | 1个 | `<用例名>.yaml` |
+
+### 2. 文件命名规范
+
+- **多平台产品线**: `<用例名>-<platform>.yaml`
+  - 示例: `account-detail-android.yaml`, `account-detail-ios.yaml`
+- **单平台产品线**: `<用例名>.yaml`
+  - 示例: `vip-purchase.yaml`
+
+### 3. 平台配置差异
+
+生成用例时，根据平台类型使用对应的配置节点：
+
+**Android 平台**:
+```yaml
+android:
+  deviceId: your-device-id
+```
+
+**iOS 平台**:
+```yaml
+ios:
+  deviceId: your-device-id
+```
+
+**Web 平台**:
+```yaml
+web:
+  url: https://m.ximalaya.com/gatekeeper/aiot-vh5-common/h5?appKey=eeed09e6ef7447c4b04724747a06f74a
+  viewportWidth: 375
+  viewportHeight: 667
+```
+
+### 4. 生成流程
+
+1. **识别产品线**: 从用例信息中提取产品线字段
+2. **匹配平台配置**: 根据产品线查找对应的平台列表
+3. **遍历生成**: 为每个平台生成独立的 YAML 用例文件
