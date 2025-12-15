@@ -1,0 +1,287 @@
+---
+description: 生成用例是ios的产品线的情况下
+alwaysApply: false
+---
+# MidScene iOS 平台测试用例模板
+
+本文档提供专门针对 **iOS 平台**的 MidScene YAML 测试用例模板和最佳实践。
+
+> 参考文档: [MidScene 官方文档 - iOS](https://v1.midscenejs.com/zh/automate-with-scripts-in-yaml.html)
+
+## iOS 平台配置说明
+
+### 基础配置
+
+```yaml
+ios:
+  # 设备 ID，可选（通过 xcrun simctl list devices 或 instruments -s devices 获取）
+  # deviceId: "your-device-id"
+  
+  # 应用启动配置，可选
+  # 方式 1: 使用 URL 启动（如网页或 URL Scheme）
+  launch: https://www.bing.com
+  # 方式 2: 使用 URL Scheme
+  # launch: "myapp://home"
+  
+  # WebDriverAgent 端口，可选，默认 8100
+  wdaPort: 8100
+```
+
+### 配置字段说明
+
+- **`deviceId`** (可选): iOS 设备或模拟器的唯一标识符
+  - 真机: 通过 `xcrun xctrace list devices` 或 `instruments -s devices` 获取
+  - 模拟器: 通过 `xcrun simctl list devices` 获取
+- **`launch`** (可选): 应用启动配置
+  - 可以是 URL 字符串（如 `"https://www.bing.com"`）
+  - 也可以是 URL Scheme 字符串（如 `"myapp://home"`）
+- **`wdaPort`** (可选): WebDriverAgent 服务端口，默认 8100。如果使用自定义端口，需要指定
+
+## iOS 平台特有指令说明
+
+### 1. 页面交互指令
+
+```yaml
+# 点击元素
+- aiTap: "点击登录按钮"
+  locate: "登录按钮"  # 可选，更精确的定位描述
+  deepThink: true      # 可选，复杂场景启用，默认 false
+  cacheable: true      # 可选，允许缓存，默认 true
+
+# 长按元素（iOS/移动端特有）
+# 注意：长按操作用于触发上下文菜单或快捷操作
+- ai: "长按用户头像触发菜单"
+  deepThink: true
+
+# 双击元素
+- aiDoubleClick: "双击商品图片"
+  locate: "商品图片区域"
+  deepThink: true
+  cacheable: true
+```
+
+**指令参数说明**：
+- **`locate`**: 更精确的定位描述，帮助 AI 更准确地找到目标元素
+- **`deepThink`**: 启用深度思考模式，用于复杂场景，默认 false
+- **`cacheable`**: 当启用缓存功能时，是否允许缓存当前 API 调用结果，默认 true
+
+### 2. 输入和键盘操作
+
+```yaml
+# 输入文本
+- aiInput: "要输入的文本内容"
+  locate: "在输入框中输入"  # 可选，更精确的定位描述
+  deepThink: true  # 可选，默认 false
+  cacheable: true  # 可选，默认 true
+
+# 按键操作（iOS 键盘）
+- aiKeyboardPress: "Enter"  # 支持的按键: Enter, Tab, Escape, ArrowUp, ArrowDown 等
+  locate: "当前聚焦的输入框"  # 可选，描述目标元素
+  deepThink: true  # 可选，默认 false
+  cacheable: true  # 可选，默认 true
+```
+
+### 3. 页面滚动
+
+```yaml
+# 基础滚动
+- aiScroll:
+    direction: "down"  # 'up' | 'down' | 'left' | 'right'，默认 'down'
+    scrollType: "singleAction"  # 'singleAction' | 'scrollToBottom' | 'scrollToTop' | 'scrollToRight' | 'scrollToLeft'，默认 'singleAction'
+    distance: 500  # 可选，滚动距离（像素），设置为 null 表示由 Midscene 自动决定
+    locate: "可滚动容器"  # 可选，执行滚动的元素，不指定则滚动整个页面
+    deepThink: true  # 可选，默认 false
+    cacheable: true  # 可选，默认 true
+
+# 滚动到页面底部
+- aiScroll:
+    direction: "down"
+    scrollType: "scrollToBottom"
+
+# 滚动到页面顶部
+- aiScroll:
+    direction: "up"
+    scrollType: "scrollToTop"
+```
+
+### 4. 数据提取和查询
+
+```yaml
+# 提取页面数据（记得在提示词中描述输出结果的格式）
+- aiQuery: "提取页面标题和描述，返回格式：{title: string, description: string}"
+  name: "page_info"  # 查询结果在 JSON 输出中的 key
+
+# 提取列表数据
+- aiQuery: >
+    提取页面中所有商品信息，返回格式：
+    {
+      products: Array<{
+        name: string,
+        price: number,
+        imageUrl: string
+      }>
+    }
+  name: "product_list"
+```
+
+**注意事项**：
+- 必须在 `aiQuery` 的提示词中明确描述输出结果的 JSON 格式
+- `name` 字段用于在测试报告的 JSON 输出中标识查询结果
+- 支持使用图像提示进行视觉问答类查询
+
+### 5. 断言和验证
+
+```yaml
+# 基础断言
+- aiAssert: "页面显示登录成功提示"
+  errorMessage: "登录失败，未显示成功提示"  # 可选，断言失败时打印的错误信息
+  name: "verify_login_success"  # 可选，给断言一个名称，会在 JSON 输出中作为 key 使用
+
+# 复杂断言
+- aiAssert: "购物车中商品数量大于0且总价正确"
+  errorMessage: "购物车状态不正确"
+  name: "verify_cart_status"
+```
+
+### 6. 报告记录
+
+```yaml
+# 在报告文件中记录当前截图，并添加描述
+- recordToReport: "登录页面截图"  # 可选，截图标题，未提供则为 'untitled'
+  content: "这是登录页面的截图，用于验证页面布局"  # 可选，截图描述
+```
+
+### 7. 图像提示（高级功能）
+
+图像提示功能允许在提示词中附带参考图像，提高 AI 定位和识别的准确性。
+
+**支持的指令**：
+- 交互操作：`aiTap`、`aiDoubleClick` 等（图像配置写在 `locate` 字段中）
+- 视觉问答：`aiQuery`、`aiAssert` 等（图像配置直接写在指令中）
+
+**图像 URL 格式**：
+- 本地路径：`./images/logo.png`
+- HTTP/HTTPS 链接：`https://example.com/logo.png`
+- Base64 字符串：`data:image/png;base64,iVBORw0KGgoAAAANS...`
+
+```yaml
+# 使用图像进行定位和操作（交互类指令）
+- aiTap:
+    locate:
+      prompt: "点击包含该标志的区域"
+      images:
+        - name: "目标标志"
+          url: https://example.com/logo.png
+          # 或使用本地路径: ./images/logo.png
+          # 或使用 Base64: data:image/png;base64,...
+      convertHttpImage2Base64: true  # 图片无法公开访问时启用
+    deepThink: true
+    cacheable: true
+
+# 使用图像进行断言（视觉问答类指令）
+- aiAssert:
+    prompt: "判断页面上是否出现该品牌标志"
+    images:
+      - name: "品牌标志"
+        url: https://example.com/brand-logo.png
+    convertHttpImage2Base64: true
+  errorMessage: "品牌标志未显示"
+  name: "verify_brand_logo"
+```
+
+**注意事项**：
+- `convertHttpImage2Base64`: 当图片链接无法被模型公开访问时，设置为 `true`，Midscene 会将图像下载后以 Base64 字符串形式发送给模型
+- 图像对象必须包含 `name` 和 `url` 字段
+- 图像提示特别适用于难以用文字描述的元素（如 Logo、图标、特定图片等）
+
+## iOS 测试用例最佳实践
+
+### 1. 应用启动处理
+
+```yaml
+# ✅ 推荐：使用 aiWaitFor 等待应用启动
+- aiWaitFor: "应用主界面已加载完成"
+  timeout: 30000
+
+# ❌ 不推荐：使用固定延时
+- sleep: 5000  # 可能等待不足或过长
+```
+
+### 2. 系统弹窗处理
+
+```yaml
+# 在 aiActContext 中说明如何处理系统弹窗
+agent:
+  aiActContext: "如果出现系统权限弹窗（如位置、通知等），点击允许。如果出现登录页面，使用测试账号登录。"
+```
+
+### 3. 表单填写优化
+
+```yaml
+# ✅ 推荐：使用专用指令
+- aiInput: "用户名"
+  locate: "在用户名输入框中输入"
+  deepThink: true
+
+# ❌ 不推荐：使用通用 ai 指令
+- ai: "在输入框中输入用户名"
+```
+
+### 4. 动态内容处理
+
+```yaml
+# 对于动态加载的内容，使用 aiWaitFor 等待
+- aiScroll:
+    direction: "down"
+    scrollType: "singleAction"
+- aiWaitFor: "新内容已加载到页面"
+- aiAssert: "页面显示新加载的内容"
+```
+
+### 5. 长按操作（iOS/移动端特有）
+
+```yaml
+# iOS 特有的长按操作，用于触发上下文菜单和快捷操作
+- ai: "长按列表中的第一项以触发操作菜单"
+  deepThink: true
+- aiWaitFor: "上下文菜单已显示"
+- aiTap: "点击删除选项"
+```
+
+## 完整指令参考
+
+### 通用指令参数
+
+所有支持 `locate` 参数的指令都支持以下参数：
+
+- **`locate`** (可选): 更精确的定位描述，帮助 AI 更准确地找到目标元素
+- **`deepThink`** (可选): 启用深度思考模式，用于复杂场景，默认 `false`
+- **`cacheable`** (可选): 当启用缓存功能时，是否允许缓存当前 API 调用结果，默认 `true`
+
+### 等待和断言指令
+
+```yaml
+# 等待某个条件满足，并设置超时时间（可选，默认 30000ms）
+- aiWaitFor: "页面跳转到结果页面"
+  timeout: 10000  # 可选，超时时间（毫秒）
+
+# 执行断言
+- aiAssert: "页面显示登录成功提示"
+  errorMessage: "登录失败"  # 可选，断言失败时的错误信息
+  name: "verify_login"  # 可选，断言名称，会在 JSON 输出中作为 key
+
+# 等待固定时间（仅在必要时使用）
+- sleep: 1000  # 毫秒
+```
+
+## 注意事项
+
+1. **设备 ID 获取**: 使用 `xcrun simctl list devices` 查看模拟器，或 `xcrun xctrace list devices` 查看真机
+2. **WebDriverAgent**: 确保 WebDriverAgent 已正确安装和配置，默认端口为 8100
+3. **系统弹窗**: 在 `aiActContext` 中说明如何处理系统权限弹窗
+4. **图像提示**: 当元素难以用文字描述时，使用图像提示提高定位准确性
+5. **错误处理**: 为关键断言添加 `errorMessage`，便于问题定位和调试
+6. **缓存策略**: 合理使用 `cacheable` 参数，对于动态内容应设置为 `false`
+7. **深度思考**: 复杂场景（如多层嵌套元素、动态加载内容）建议启用 `deepThink: true`
+8. **长按操作**: iOS 特有的长按操作，用于触发上下文菜单和快捷操作
+9. **参考文档**: 更多详细信息请参考 [MidScene 官方文档](https://v1.midscenejs.com/zh/automate-with-scripts-in-yaml.html)

@@ -1,0 +1,326 @@
+---
+description: 生成用例是web的产品线的情况下
+alwaysApply: false
+---
+# MidScene Web 平台测试用例模板
+
+本文档提供专门针对 **Web 平台**的 MidScene YAML 测试用例模板和最佳实践。
+
+## Web 平台配置说明
+
+### 基础配置
+
+```yaml
+web:
+  # 访问的 URL，必填。如果提供了 `serve` 参数，则提供相对路径
+  url: https://www.example.com
+  
+  # 在本地路径下启动一个静态服务，可选
+  # serve: ./dist
+  
+  # 浏览器 UA，可选
+  # userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  
+  # 浏览器视口宽度，可选，默认 1280
+  viewportWidth: 1920
+  
+  # 浏览器视口高度，可选，默认 960
+  viewportHeight: 1080
+  
+  # 浏览器设备像素比，可选，默认 1
+  # deviceScaleFactor: 2
+  
+  # JSON 格式的浏览器 Cookie 文件路径，可选
+  # cookie: ./cookies.json
+  
+  # 等待网络空闲的策略，可选
+  waitForNetworkIdle:
+    # 等待超时时间，可选，默认 2000ms
+    timeout: 2000
+    # 是否在等待超时后继续，可选，默认 true
+    continueOnNetworkIdleError: true
+```
+
+### 配置字段说明
+
+- **`url`** (必填): 要访问的网页地址。如果提供了 `serve` 参数，则可以使用相对路径
+- **`serve`** (可选): 本地静态文件目录，用于本地开发测试。设置后会在本地启动静态服务
+- **`userAgent`** (可选): 自定义浏览器 User-Agent 字符串，用于模拟不同浏览器或设备
+- **`viewportWidth/Height`** (可选): 浏览器视口尺寸，默认 1280x960。用于控制页面渲染尺寸
+- **`deviceScaleFactor`** (可选): 设备像素比，默认 1。用于高 DPI 屏幕（如 Retina 显示器）测试
+- **`cookie`** (可选): Cookie 文件路径（JSON 格式），用于保持登录状态和会话信息
+- **`waitForNetworkIdle`** (可选): 网络空闲等待策略，控制页面加载完成的判断标准
+  - `timeout`: 等待网络空闲的超时时间（毫秒），默认 2000ms
+  - `continueOnNetworkIdleError`: 等待超时后是否继续执行，默认 true
+
+## Web 平台特有指令说明
+
+### 1. 页面交互指令
+
+```yaml
+# 点击元素
+- aiTap: "点击登录按钮"
+  locate: "登录按钮"  # 可选，更精确的定位描述
+  deepThink: true      # 可选，复杂场景启用，默认 false
+  xpath: "//button[@id='login']"  # 可选，直接指定 xpath，优先级最高
+  cacheable: true      # 可选，允许缓存，默认 true
+
+# 双击元素
+- aiDoubleClick: "双击商品图片"
+  locate: "商品图片区域"
+  deepThink: true
+  xpath: "//img[@class='product-image']"  # 可选
+  cacheable: true
+
+# 右键点击
+- aiRightClick: "右键点击菜单项"
+  locate: "菜单项"
+  deepThink: true
+  xpath: "//div[@class='menu-item']"  # 可选
+  cacheable: true
+
+# 鼠标悬停
+- aiHover: "将鼠标悬停在用户头像上"
+  locate: "用户头像"
+  deepThink: true
+  xpath: "//img[@class='avatar']"  # 可选
+  cacheable: true
+```
+
+**指令参数说明**：
+- **`locate`**: 更精确的定位描述，帮助 AI 更准确地找到目标元素
+- **`deepThink`**: 启用深度思考模式，用于复杂场景，默认 false
+- **`xpath`**: 直接指定元素的 XPath 路径，优先级最高（会优先使用 xpath，然后使用缓存，最后使用 AI 模型）
+- **`cacheable`**: 当启用缓存功能时，是否允许缓存当前 API 调用结果，默认 true
+
+### 2. 输入和键盘操作
+
+```yaml
+# 输入文本
+- aiInput: "要输入的文本内容"
+  locate: "在输入框中输入"  # 可选，更精确的定位描述
+  deepThink: true  # 可选，默认 false
+  xpath: "//input[@id='username']"  # 可选，直接指定 xpath
+  cacheable: true  # 可选，默认 true
+
+# 按键操作（如 Enter，Tab，Escape 等）
+- aiKeyboardPress: "Enter"  # 支持的按键: Enter, Tab, Escape, ArrowUp, ArrowDown, ArrowLeft, ArrowRight 等
+  locate: "当前聚焦的输入框"  # 可选，描述目标元素
+  deepThink: true  # 可选，默认 false
+  xpath: "//input[@type='text']"  # 可选，直接指定 xpath
+  cacheable: true  # 可选，默认 true
+```
+
+### 3. 页面滚动
+
+```yaml
+# 基础滚动
+- aiScroll:
+    direction: "down"  # 'up' | 'down' | 'left' | 'right'，默认 'down'
+    scrollType: "singleAction"  # 'singleAction' | 'scrollToBottom' | 'scrollToTop' | 'scrollToRight' | 'scrollToLeft'，默认 'singleAction'
+    distance: 500  # 可选，滚动距离（像素），设置为 null 表示由 Midscene 自动决定
+    locate: "可滚动容器"  # 可选，执行滚动的元素，不指定则滚动整个页面
+    deepThink: true  # 可选，默认 false
+    xpath: "//div[@class='scrollable-container']"  # 可选，直接指定 xpath
+    cacheable: true  # 可选，默认 true
+
+# 滚动到页面底部
+- aiScroll:
+    direction: "down"
+    scrollType: "scrollToBottom"
+
+# 滚动到页面顶部
+- aiScroll:
+    direction: "up"
+    scrollType: "scrollToTop"
+
+# 滚动指定元素
+- aiScroll:
+    direction: "down"
+    scrollType: "singleAction"
+    distance: 300
+    locate: "商品列表容器"
+    deepThink: true
+```
+
+### 4. 数据提取和查询
+
+```yaml
+# 提取页面数据（记得在提示词中描述输出结果的格式）
+- aiQuery: "提取页面标题和描述，返回格式：{title: string, description: string}"
+  name: "page_info"  # 查询结果在 JSON 输出中的 key
+
+# 提取列表数据
+- aiQuery: >
+    提取页面中所有商品信息，返回格式：
+    {
+      products: Array<{
+        name: string,
+        price: number,
+        imageUrl: string
+      }>
+    }
+  name: "product_list"
+
+# 使用图像提示进行查询
+- aiQuery:
+    prompt: "提取该图像下方显示的价格信息，返回格式：{price: string}"
+    images:
+      - name: "商品图片"
+        url: https://example.com/product.png
+    convertHttpImage2Base64: true
+  name: "product_price"
+```
+
+**注意事项**：
+- 必须在 `aiQuery` 的提示词中明确描述输出结果的 JSON 格式
+- `name` 字段用于在测试报告的 JSON 输出中标识查询结果
+- 支持使用图像提示进行视觉问答类查询
+
+### 6. JavaScript 执行
+
+```yaml
+# 执行 JavaScript 代码
+- javascript: "return document.querySelector('.price').textContent"
+  name: "product_price"
+
+# 执行复杂 JavaScript
+- javascript: |
+    const elements = document.querySelectorAll('.item');
+    return Array.from(elements).map(el => ({
+      text: el.textContent,
+      href: el.href
+    }));
+  name: "item_list"
+```
+
+### 7. 报告记录
+
+```yaml
+# 在报告文件中记录当前截图，并添加描述
+- recordToReport: "登录页面截图"  # 可选，截图标题，未提供则为 'untitled'
+  content: "这是登录页面的截图，用于验证页面布局"  # 可选，截图描述
+
+# 仅记录截图，不添加描述
+- recordToReport: "关键步骤截图"
+```
+
+**使用场景**：
+- 在关键测试步骤后记录截图，便于问题排查
+- 用于生成测试报告，提供可视化的测试过程记录
+
+### 8. 图像提示（高级功能）
+
+图像提示功能允许在提示词中附带参考图像，提高 AI 定位和识别的准确性。
+
+**支持的指令**：
+- 交互操作：`aiTap`、`aiHover`、`aiDoubleClick`、`aiRightClick` 等（图像配置写在 `locate` 字段中）
+- 视觉问答：`aiQuery`、`aiAssert`、`aiAsk`、`aiBoolean`、`aiNumber`、`aiString` 等（图像配置直接写在指令中）
+
+**图像 URL 格式**：
+- 本地路径：`./images/logo.png`
+- HTTP/HTTPS 链接：`https://example.com/logo.png`
+- Base64 字符串：`data:image/png;base64,iVBORw0KGgoAAAANS...`
+
+```yaml
+# 使用图像进行定位和操作（交互类指令）
+- aiTap:
+    locate:
+      prompt: "点击包含该标志的区域"
+      images:
+        - name: "目标标志"
+          url: https://example.com/logo.png
+          # 或使用本地路径: ./images/logo.png
+          # 或使用 Base64: data:image/png;base64,...
+      convertHttpImage2Base64: true  # 图片无法公开访问时启用，会将图片转换为 Base64
+    deepThink: true
+    cacheable: true
+
+- aiHover:
+    locate:
+      prompt: "将鼠标移动到包含该图标的区域"
+      images:
+        - name: "GitHub 标志"
+          url: https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png
+          convertHttpImage2Base64: true
+
+# 使用图像进行断言（视觉问答类指令）
+- aiAssert:
+    prompt: "判断页面上是否出现该品牌标志"
+    images:
+      - name: "品牌标志"
+        url: https://example.com/brand-logo.png
+        convertHttpImage2Base64: true
+  errorMessage: "品牌标志未显示"
+  name: "verify_brand_logo"
+
+# 使用图像进行查询
+- aiQuery:
+    prompt: "提取该图像下方显示的价格信息，返回格式：{price: string}"
+    images:
+      - name: "商品图片"
+        url: https://example.com/product.png
+        convertHttpImage2Base64: true
+  name: "product_price"
+```
+
+**注意事项**：
+- `convertHttpImage2Base64`: 当图片链接无法被模型公开访问时，设置为 `true`，Midscene 会将图像下载后以 Base64 字符串形式发送给模型
+- 图像对象必须包含 `name` 和 `url` 字段
+- 图像提示特别适用于难以用文字描述的元素（如 Logo、图标、特定图片等）
+
+## Web 测试用例最佳实践
+
+### 1. 页面加载处理
+
+```yaml
+# ✅ 推荐：使用 aiWaitFor 等待页面加载
+- aiWaitFor: "页面主要内容已加载完成"
+  timeout: 30000
+
+# ❌ 不推荐：使用固定延时
+- sleep: 5000  # 可能等待不足或过长
+```
+
+### 2. 网络请求处理
+
+```yaml
+# 在任务级别配置网络空闲策略
+- name: "数据加载测试"
+  continueOnNetworkIdleError: false  # 网络错误时不继续
+  flow:
+    - aiTap: "点击加载数据按钮"
+    - aiWaitFor: "数据列表已加载"
+```
+
+### 3. 表单填写优化
+
+```yaml
+# ✅ 推荐：使用专用指令
+- aiInput: "用户名"
+  locate: "在用户名输入框中输入"
+  deepThink: true
+
+# ❌ 不推荐：使用通用 ai 指令
+- ai: "在输入框中输入用户名"
+```
+
+### 4. 动态内容处理
+
+```yaml
+# 对于动态加载的内容，使用 aiWaitFor 等待
+- aiScroll:
+    direction: "down"
+    scrollType: "singleAction"
+- aiWaitFor: "新内容已加载到页面"
+- aiAssert: "页面显示新加载的内容"
+```
+
+### 5. Cookie 和会话管理
+
+```yaml
+# 使用 cookie 文件保持登录状态
+web:
+  url: https://www.example.com
+  cookie: ./cookies.json  # JSON 格式的 Cookie 文件
+```
