@@ -29,11 +29,45 @@ midscene-example/
 
 ## 快速开始
 
+### 环境配置
+
+本项目使用**统一的 `.env` 文件管理**，所有 packages 共享根目录的环境变量配置。
+
+#### 首次设置
+
+1. **创建 `.env` 文件**（如果还没有）：
+   ```bash
+   cp env-example .env
+   ```
+
+2. **编辑 `.env` 文件**，填入你的配置：
+   ```bash
+   # 编辑 .env 文件
+   vim .env
+   ```
+
+3. **设置符号链接**（自动执行，或手动运行）：
+   ```bash
+   npm run setup:env
+   ```
+
+   这会为所有 packages 创建指向根目录 `.env` 的符号链接，确保每个包都能访问相同的环境变量。
+
+#### 环境变量说明
+
+`.env` 文件包含 MidScene 所需的配置，例如：
+- `OPENAI_BASE_URL` - API 基础 URL
+- `OPENAI_API_KEY` - API 密钥
+- `MIDSCENE_MODEL_NAME` - 模型名称
+- `MIDSCENE_USE_DOUBAO_VISION` - 是否使用豆包视觉模型
+
 ### 安装依赖
 
 ```bash
 npm install
 ```
+
+> 注意：`npm install` 会自动执行 `setup:env` 脚本，确保所有包的 `.env` 符号链接已设置。
 
 ### 运行测试
 
@@ -111,6 +145,10 @@ npm run test:case -- cases/android/douyin-ximalaya-miniprogram.yaml
 3. 创建 `cases/` 目录，按平台分类（android/ios/web）
 4. 添加测试用例文件
 5. 创建 `README.md` 说明文档
+6. **运行设置脚本**，为新包创建共享配置文件的符号链接：
+   ```bash
+   npm run setup:env
+   ```
 
 ## 工具
 
@@ -118,9 +156,87 @@ npm run test:case -- cases/android/douyin-ximalaya-miniprogram.yaml
 
 位于 `tools/excel-to-yaml/`，用于将 Excel 格式的测试用例转换为 MidScene YAML 格式。
 
+## 统一配置文件管理
+
+### 共享配置文件
+
+本项目采用**统一的配置文件管理**，所有 packages 共享根目录的配置：
+
+- **`.env`**：环境变量配置（MidScene API 密钥等）
+- **`.gitignore`**：Git 忽略规则配置
+
+每个 package 目录下的这些文件都是指向根目录的符号链接，确保配置统一管理。
+
+### 设置共享配置
+
+#### 首次设置
+
+```bash
+# 运行设置脚本（自动创建符号链接）
+npm run setup:env
+```
+
+#### 手动设置
+
+如果需要手动为新的 package 创建符号链接：
+
+```bash
+# 方法1: 使用脚本（推荐）
+npm run setup:env
+
+# 方法2: 手动创建
+cd packages/your-package-name
+ln -sf ../../.env .env
+ln -sf ../../.gitignore .gitignore
+```
+
+### 环境变量配置
+
+#### 创建和编辑 `.env`
+
+1. **创建 `.env` 文件**（如果还没有）：
+   ```bash
+   cp env-example .env
+   ```
+
+2. **编辑 `.env` 文件**，填入你的配置：
+   ```bash
+   vim .env
+   ```
+
+3. **运行设置脚本**：
+   ```bash
+   npm run setup:env
+   ```
+
+#### 环境变量说明
+
+`.env` 文件包含 MidScene 所需的配置，例如：
+- `OPENAI_BASE_URL` - API 基础 URL
+- `OPENAI_API_KEY` - API 密钥
+- `MIDSCENE_MODEL_NAME` - 模型名称
+- `MIDSCENE_USE_DOUBAO_VISION` - 是否使用豆包视觉模型
+
+### 为特定包使用独立配置
+
+如果某个包需要独立的配置文件：
+
+```bash
+cd packages/your-package-name
+# 删除符号链接
+rm .env .gitignore
+# 创建独立的文件
+cp ../../env-example .env
+cp ../../.gitignore .gitignore
+# 编辑独立配置
+vim .env
+vim .gitignore
+```
+
 ## 注意事项
 
-1. 所有包都是私有包（`"private": true`），不会发布到 npm
+1. 所有包都是私有包（`"private": true"`），不会发布到 npm
 2. 使用 npm workspaces 管理依赖
 3. 测试用例文件命名需遵循规范：`<用例名>-<platform>.yaml`
 4. 运行测试前请确保已配置好对应的设备环境
+5. **环境变量管理**：所有 packages 默认共享根目录的 `.env` 文件，通过符号链接实现

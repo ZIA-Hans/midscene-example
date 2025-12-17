@@ -4,10 +4,10 @@
   "description": "抖音小程序测试用例包",
   "private": true,
   "scripts": {
-    "test": "midscene run cases",
-    "test:android": "midscene run cases/android",
-    "test:ios": "midscene run cases/ios",
-    "test:case": "midscene run",
+    "test": "midscene cases",
+    "test:android": "midscene cases/android",
+    "test:ios": "midscene cases/ios",
+    "test:case": "midscene",
     "list": "find cases -name '*.yaml' -type f"
   },
   "keywords": [
