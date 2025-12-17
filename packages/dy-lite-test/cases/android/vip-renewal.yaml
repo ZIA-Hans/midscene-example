@@ -1,0 +1,30 @@
+# 功能: VIP 会员续费
+# 预置条件: 处于 SKU 页面
+
+android:
+  # 请替换为你的设备 ID (通过 adb devices 获取)
+  deviceId: a23456ae
+
+tasks:
+  - name: VIP会员续费
+    flow:
+      # 进入个人中心
+      - aiAction: 点击底部"我的"标签，进入个人中心
+
+      # 点击立即续费
+      - aiAction: 点击"立即续费"按钮
+
+      # 选择会员套餐
+      - aiAction: 选择"1个月会员"套餐选项
+
+      # 确认购买
+      - aiAction: 点击"确认购买"或"立即支付"按钮
+
+  - name: 验证收银台弹出
+    flow:
+      # 等待收银台加载
+      - sleep: 3000
+
+      # 断言：验证抖音收银台浮层已弹出
+      - aiAssert: 页面上出现了抖音的收银台浮层或支付弹窗
+

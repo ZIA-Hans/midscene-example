@@ -1,0 +1,16 @@
+# iOS 平台测试用例目录
+
+请在此目录下添加 iOS 平台的测试用例文件。
+
+文件命名规范：`<用例名>-ios.yaml`
+
+示例：
+- `douyin-ximalaya-miniprogram-ios.yaml`
+- `free-audio-play-ios.yaml`
+- `homepage-layout-check-ios.yaml`
+- `phone-code-login-ios.yaml`
+- `vip-renewal-ios.yaml`
+- `xiaoya-wear-ios.yaml`
+
+注意：iOS 测试用例需要使用 `ios:` 配置节点，而不是 `android:`。
+

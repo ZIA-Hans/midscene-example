@@ -1,0 +1,21 @@
+{
+  "name": "@midscene/dy-lite-test",
+  "version": "1.0.0",
+  "description": "抖音小程序测试用例包",
+  "private": true,
+  "scripts": {
+    "test": "midscene run cases",
+    "test:android": "midscene run cases/android",
+    "test:ios": "midscene run cases/ios",
+    "test:case": "midscene run",
+    "list": "find cases -name '*.yaml' -type f"
+  },
+  "keywords": [
+    "midscene",
+    "test",
+    "douyin",
+    "miniprogram"
+  ],
+  "author": "",
+  "license": "ISC"
+}

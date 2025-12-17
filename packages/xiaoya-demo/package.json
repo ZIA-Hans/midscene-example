@@ -1,0 +1,21 @@
+{
+  "name": "@midscene/xiaoya-demo",
+  "version": "1.0.0",
+  "description": "喜马拉雅穿戴App测试用例包",
+  "private": true,
+  "scripts": {
+    "test": "midscene run cases",
+    "test:android": "midscene run cases/android",
+    "test:ios": "midscene run cases/ios",
+    "test:case": "midscene run",
+    "list": "find cases -name '*.yaml' -type f"
+  },
+  "keywords": [
+    "midscene",
+    "test",
+    "xiaoya",
+    "wear"
+  ],
+  "author": "",
+  "license": "ISC"
+}
