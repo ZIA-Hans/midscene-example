@@ -39,7 +39,7 @@ tasks:
       
       # 步骤1: 首页点击搜索框
       - aiTap: "点击首页的搜索框，进入搜索页面"
-        deepThink: true
+        # deepThink: true
       
       # 等待搜索页面加载
       # - sleep: 3000
@@ -51,18 +51,17 @@ tasks:
       
       # 步骤2: 输入"大唐双龙传"并搜索
       - aiTap: "点击搜索栏输入框激活它"
-        deepThink: true
+        # deepThink: true
       
       # 输入搜索关键词
       - aiInput: "大唐双龙传"
         locate: "在已激活的搜索输入框中输入文字"
-        deepThink: true
+        # deepThink: true
             
-      # 点击搜索按钮
-      - aiKeyboardPress: "搜索"
-        locate: "在已激活的手机键盘点击搜索按钮"
-        deepThink: true
-      # - ai: 点击搜索按钮进入搜索页面
+      # 方案1: 使用Enter键触发搜索（Android键盘搜索按钮通常对应Enter键）
+      - aiKeyboardPress: "Enter"
+        locate: "在已激活的搜索输入框中，按键盘上的Enter/搜索键"
+        # deepThink: true
 
       # 验证搜索中状态
       # - aiAssert: "页面应该显示搜索中的加载状态提示"
@@ -79,7 +78,7 @@ tasks:
       
       # 步骤4: 切换至专辑标签页
       - aiTap: "点击专辑标签页切换到专辑列表视图"
-        deepThink: true
+        # deepThink: true
       
       # 验证专辑筛选方式
       - aiAssert: "专辑列表页应该展示3种筛选方式：综合排序、播放最多、最近更新"
@@ -88,7 +87,7 @@ tasks:
       
       # 步骤5: 选择指定专辑卡片
       - aiTap: "点击'大唐双龙传【精录】'专辑卡片进入详情页"
-        deepThink: true
+        # deepThink: true
       
       # 验证专辑详情页元素
       - aiAssert: "专辑详情页应该显示专辑封面、简介和音频列表"
