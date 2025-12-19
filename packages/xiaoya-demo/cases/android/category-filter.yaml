@@ -35,7 +35,7 @@ tasks:
     flow:
       # 步骤1: 首页点击"全部"按钮
       - aiTap: "点击首页的'全部'按钮，进入分类首页"
-        deepThink: true
+        # deepThink: true
       
       - aiWaitFor: 页面加载完成
         timeout: 3000
@@ -47,7 +47,7 @@ tasks:
       
       # 步骤2: 选择分类"相声评书"
       - aiTap: "点击'相声评书'分类选项，进入对应分类页面"
-        deepThink: true
+        # deepThink: true
       
       - sleep: 1000
       
@@ -58,12 +58,12 @@ tasks:
       
       # 步骤3: 更改筛选条件为"播放最多"+"小品"
       - aiTap: "点击排序筛选按钮，选择'播放最多'排序方式"
-        deepThink: true
+        # deepThink: true
       
       - sleep: 1000
       
       - aiTap: "点击内容类型筛选按钮，选择'小品'子分类"
-        deepThink: true
+        # deepThink: true
       
       - sleep: 1000
       
@@ -74,7 +74,7 @@ tasks:
       
       # 步骤4: 选择排序第一的专辑卡片并点击
       - aiTap: "点击专辑列表中排序第一的专辑卡片"
-        deepThink: true
+        # deepThink: true
       
       - aiWaitFor: 页面加载完成
         timeout: 3000
