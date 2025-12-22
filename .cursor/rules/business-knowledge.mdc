@@ -6,12 +6,17 @@ alwaysApply: true
 
 ## 抖音小程序
 
-- **平台**: android / ios
+- **平台**: android
 - **入口**: 抖音APP -> 常用小程序 -> 喜马小程序
+
+## 微信小程序
+
+- **平台**: android
+- **入口**: 微信APP -> 常用小程序 -> 喜马拉雅小程序
 
 ## 喜马拉雅穿戴App
 
-- **平台**: android / ios
+- **平台**: android
 - **入口**: 喜马拉雅穿戴APP
 - **android schema**: 
 - **ios schema**: 
