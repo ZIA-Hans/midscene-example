@@ -1,0 +1,179 @@
+---
+description: 将MD测试用例文档转换为YAML自动化测试脚本时
+alwaysApply: false
+---
+# MD 转 YAML 用例生成规则
+
+当用户要求将 Markdown 格式的测试用例文档转换为 MidScene YAML 自动化测试脚本时，必须遵循以下规则。
+
+## 1. 文件放置规则
+
+### 1.1 目录结构
+
+生成的 YAML 文件必须放置在 **MD 文件所在 `cases/` 目录下的对应平台子目录**中：
+
+```
+packages/<package-name>/
+├── cases/
+│   ├── <用例文档>.md          # 源MD文件
+│   ├── android/               # Android平台YAML用例
+│   │   └── <用例名>.yaml
+│   ├── ios/                   # iOS平台YAML用例
+│   │   └── <用例名>.yaml
+│   └── web/                   # Web平台YAML用例
+│       └── <用例名>.yaml
+├── package.json
+└── README.md
+```
+
+### 1.2 平台识别规则
+
+根据以下信息判断目标平台，按优先级从高到低：
+
+1. **用例编号/ID 包含平台标识**：
+   - 包含 `Android`、`Andriod`、`android` → 放入 `cases/android/`
+   - 包含 `iOS`、`ios`、`IOS` → 放入 `cases/ios/`
+   - 包含 `Web`、`web`、`WEB`、`H5`、`h5` → 放入 `cases/web/`
+
+2. **用例内容描述**：
+   - 提及 "Android应用"、"安卓"、"APK" → Android 平台
+   - 提及 "iOS应用"、"iPhone"、"iPad" → iOS 平台
+   - 提及 "网页"、"浏览器"、"H5页面"、"小程序" → Web 平台
+
+3. **用户明确指定**：
+   - 用户在对话中明确说明目标平台
+
+4. **默认规则**：
+   - 如无法判断，**询问用户**目标平台
+   - 不要猜测或默认选择
+
+### 1.3 文件命名规则
+
+YAML 文件名应遵循以下规则：
+
+1. 使用**小写字母**和**连字符**（kebab-case）
+2. 名称应反映测试功能，简洁明了
+3. 避免使用中文文件名
+
+**命名示例**：
+
+| 用例编号 | 功能点 | 生成文件名 |
+|---------|-------|-----------|
+| CenterApp_Andriod_Basic_1 | AI交互 | `ai-interaction.yaml` |
+| WechatMini_Login_001 | 手机号登录 | `phone-login.yaml` |
+| WebPortal_Search_002 | 搜索功能 | `search-feature.yaml` |
+
+## 2. 转换流程
+
+### 2.1 分析阶段
+
+在转换前，必须完成以下分析：
+
+1. **识别源文件位置**：确定 MD 文件所在的 package 路径
+2. **判断目标平台**：根据上述规则识别平台
+3. **确定输出路径**：`<MD文件目录>/<平台>/`
+4. **生成文件名**：根据命名规则生成
+
+### 2.2 转换阶段
+
+1. 解析 MD 文件中的用例信息：
+   - 用例编号 → `agent.testId`
+   - 模块 → `agent.groupName`
+   - 功能点 → 任务名称
+   - 预置条件 → `agent.aiActContext`
+   - 操作步骤 → `flow` 中的具体指令
+   - 预期结果 → `aiAssert` 断言
+
+2. 根据目标平台选择配置：
+   - Android → 使用 `android:` 配置节点
+   - iOS → 使用 `ios:` 配置节点
+   - Web → 使用 `web:` 配置节点
+
+### 2.3 输出阶段
+
+1. 在转换前向用户确认：
+   - 源文件：`packages/<name>/cases/<文档>.md`
+   - 目标平台：`android` / `ios` / `web`
+   - 输出路径：`packages/<name>/cases/<平台>/<文件名>.yaml`
+
+2. 生成 YAML 文件到正确位置
+
+3. 输出生成结果摘要
+
+## 3. 批量转换规则
+
+当 MD 文件包含多个用例时：
+
+### 3.1 单平台多用例
+
+如果所有用例属于同一平台，可以：
+- **方式1**：生成多个独立的 YAML 文件（推荐）
+- **方式2**：合并为一个 YAML 文件，包含多个 tasks
+
+### 3.2 多平台用例
+
+如果用例涉及多个平台：
+- 按平台分组
+- 为每个平台生成独立的 YAML 文件
+- 放置到对应的平台目录
+
+## 4. 转换示例
+
+### 输入：MD 文件
+
+```markdown
+## 1. CenterApp_Andriod_Basic_1
+
+### 基本信息
+| 属性 | 值 |
+|------|----|
+| **模块** | AI交互 |
+| **功能点** | 进入GUI发起AI交互 |
+
+### 预置条件
+账号已登录
+
+### 测试步骤与预期结果
+| 步骤 | 操作 | 预期结果 |
+|:----:|------|----------|
+| 1 | 首页点击小雅图标 | 跳转至GUI交互首页 |
+| 2 | 输入"今天天气" | 显示天气信息 |
+```
+
+### 分析结果
+
+```
+源文件: packages/xiaoya-demo/cases/测试用例.md
+用例编号: CenterApp_Andriod_Basic_1
+平台识别: Android（编号包含 "Andriod"）
+输出路径: packages/xiaoya-demo/cases/android/ai-interaction.yaml
+```
+
+### 输出：YAML 文件
+
+```yaml
+# 文件路径: packages/xiaoya-demo/cases/android/ai-interaction.yaml
+
+agent:
+  testId: "CenterApp_Andriod_Basic_1"
+  groupName: "AI交互"
+  aiActContext: "账号已登录..."
+
+android:
+  deviceId: "your-device-id"
+
+tasks:
+  - name: "进入GUI发起AI交互"
+    flow:
+      - aiTap: "点击首页的小雅图标"
+      - aiAssert: "跳转至GUI交互首页"
+      # ...
+```
+
+## 5. 注意事项
+
+1. **不要覆盖已存在的文件**：如果目标路径已有同名文件，提示用户确认
+2. **保持目录结构一致**：确保 android/ios/web 子目录存在
+3. **平台配置完整**：根据平台添加必要的配置项
+4. **遵循 MidScene 规范**：YAML 内容必须符合 MidScene 框架要求
+5. **主动询问**：平台不明确时，主动询问用户

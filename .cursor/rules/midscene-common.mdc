@@ -86,6 +86,29 @@ alwaysApply: false
    - 当没有对应的专用指令时使用
    - 需要 AI 进行上下文理解和决策时使用
 
+5. **`deepThink` 参数使用规则（重要）**
+   - ❌ **默认不使用**: 生成用例时默认不添加 `deepThink: true`
+   - ✅ **仅在以下情况使用**:
+     - 元素描述不明确或模糊时（如"点击第一个按钮"）
+     - 页面元素较多且目标元素难以区分时
+     - 需要 AI 进行复杂的上下文理解时
+     - 多次执行失败后作为调试手段
+   - **理由**: `deepThink` 会显著增加执行时间，影响测试效率
+   - **示例**:
+     ```yaml
+     # ✅ 元素描述清晰，不需要 deepThink
+     - aiTap: "点击'登录'按钮"
+     - aiTap: "点击底部tab栏的'我的'"
+     - aiInput: "13800138000"
+       locate: "在手机号输入框中输入"
+     
+     # ✅ 元素描述模糊，需要 deepThink
+     - aiTap: "点击列表中播放量最高的专辑"
+       deepThink: true
+     - aiTap: "在多个相似按钮中找到并点击正确的确认按钮"
+       deepThink: true
+     ```
+
 ## 工作原则
 
 1. **可读性优先**: 用例必须清晰易懂，注释充分，结构合理
@@ -164,18 +187,16 @@ tasks:
     # 网络空闲错误时是否继续（可选）
     continueOnNetworkIdleError: false
     flow:
-      # 步骤 1: 使用专用指令
-      - aiTap: "点击登录按钮"
-        deepThink: true  # 复杂场景启用
-        name: "click_login_button"  # 便于报告识别
+      # 步骤 1: 使用专用指令（元素描述清晰，无需 deepThink）
+      - aiTap: "点击'登录'按钮"
+        name: "click_login_button"
       
       # 步骤 2: 等待页面跳转
       - aiWaitFor: "页面跳转到登录页面"
       
-      # 步骤 3: 输入文本
+      # 步骤 3: 输入文本（locate 描述清晰，无需 deepThink）
       - aiInput: "用户名"
         locate: "在用户名输入框中输入"
-        deepThink: true
       
       # 步骤 4: 断言验证
       - aiAssert: "页面显示登录成功提示"
@@ -189,10 +210,9 @@ tasks:
       # 步骤 6: 执行动作
       - aiAction: "向下滑动页面"
       
-      # 步骤 7: 复杂操作使用 ai 指令
-      - ai: "找到并点击设置菜单中的'关于'选项"
-        deepThink: true
-        cacheable: true
+      # 步骤 7: 复杂场景（元素模糊）才使用 deepThink
+      - ai: "在多个相似选项中找到并点击'关于'选项"
+        deepThink: true  # 仅当元素描述模糊时使用
       
       # 步骤 8: 固定时间间隔（仅在必要时）
       - sleep: 1000  # 等待动画完成
@@ -225,7 +245,7 @@ tasks:
    - 优先使用专用指令（`aiTap`、`aiInput` 等）
    - 页面跳转使用 `aiWaitFor` 而非 `sleep`
    - 关键断言添加 `errorMessage` 便于调试
-   - 复杂场景启用 `deepThink`，可缓存操作使用 `cacheable`
+   - **谨慎使用 `deepThink`**：仅在元素描述模糊或难以定位时添加，避免影响执行效率
 
 ## 输出要求
 

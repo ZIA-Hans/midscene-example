@@ -1,6 +1,5 @@
 ---
-description: 生成yaml用例的时候
-alwaysApply: false
+alwaysApply: true
 ---
 # 测试产品线
 描述当前喜马IoT部门有哪些产品线，以及对应产品线的数据
