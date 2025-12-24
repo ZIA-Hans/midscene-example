@@ -1,0 +1,22 @@
+# 功能: 未登录账号点击VIP整集购买音频跳转登录
+# 预置条件: 账号未登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_24"
+  groupName: "VIP整集购买登录跳转"
+  generateReport: true
+  aiActContext: "账号未登录，点击既是vip又是整集购买的音频后验证跳转到登录页面"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "未登录账号点击VIP整集购买音频"
+    flow:
+      - aiWaitFor: "账号未登录"
+      - ai: "点击vip音频"
+      - aiWaitFor: "页面跳转"
+      - aiAssert: "跳转至登录页面"
+        errorMessage: "未跳转到登录页面"
+        name: "verify_login_redirect"
+

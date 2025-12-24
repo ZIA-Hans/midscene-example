@@ -1,0 +1,25 @@
+# 功能: 声音输出
+# 预置条件: 处于播放器页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_43"
+  groupName: "声音输出"
+  generateReport: true
+  aiActContext: "处于播放器页面，播放进行中，验证声音输出和音量调节"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "测试声音输出功能"
+    flow:
+      - aiWaitFor: "处于播放器页面"
+      - ai: "开始播放音频"
+      - aiWaitFor: "音频开始播放"
+      - aiAssert: "声音正常输出，音量调节可生效"
+        errorMessage: "声音输出异常或音量调节无效"
+        name: "verify_audio_output"
+      - aiAssert: "声音播放流畅无卡顿"
+        errorMessage: "声音播放有卡顿"
+        name: "verify_audio_smooth"
+

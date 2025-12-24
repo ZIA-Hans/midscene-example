@@ -3,3 +3,6 @@ MIDSCENE_MODEL_BASE_URL="https://ark.cn-beijing.volces.com/api/v3"
 MIDSCENE_MODEL_API_KEY="<替换为你的 API Key>" // 如何找到API key看下方
 MIDSCENE_MODEL_NAME="<替换为你的模型名称>" // 使用1.6-vision模型，则填 "doubao-seed-1-6-vision-250815"
 MIDSCENE_MODEL_FAMILY="doubao-vision"
+
+// Android 设备 ID（通过 adb devices 获取）
+ANDROID_DEVICE_ID="your-device-id"

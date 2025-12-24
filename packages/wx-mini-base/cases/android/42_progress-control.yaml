@@ -1,0 +1,27 @@
+# 功能: 进度控制
+# 预置条件: 处于播放器页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_42"
+  groupName: "进度控制"
+  generateReport: true
+  aiActContext: "处于播放器页面，播放音频时观察进度条，并拖动进度条调整播放进度"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "测试进度控制功能"
+    flow:
+      - aiWaitFor: "处于播放器页面"
+      - ai: "开始播放音频"
+      - aiWaitFor: "音频开始播放"
+      - aiAssert: "进度显示与播放进度匹配"
+        errorMessage: "进度显示与播放进度不匹配"
+        name: "verify_progress_display"
+      - ai: "拖动进度条到中间位置"
+      - aiWaitFor: "播放进度调整"
+      - aiAssert: "拖动进度条等同于调整播放进度"
+        errorMessage: "拖动进度条后播放进度未调整"
+        name: "verify_progress_drag"
+

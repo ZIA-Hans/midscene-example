@@ -1,0 +1,32 @@
+# 功能: 播放控制
+# 预置条件: 处于播放器页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_41"
+  groupName: "播放控制"
+  generateReport: true
+  aiActContext: "处于播放器页面，测试播放控制功能：播放/暂停、上一曲、下一曲"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "测试播放控制功能"
+    flow:
+      - aiWaitFor: "处于播放器页面"
+      - aiTap: "点击播放/暂停按钮"
+      - aiWaitFor: "播放状态切换"
+      - aiAssert: "播放/暂停按钮正确响应"
+        errorMessage: "播放/暂停按钮响应异常"
+        name: "verify_play_pause"
+      - aiTap: "点击上一曲按钮"
+      - aiWaitFor: "切换到上一曲"
+      - aiAssert: "上一曲按钮正确响应"
+        errorMessage: "上一曲按钮响应异常"
+        name: "verify_previous"
+      - aiTap: "点击下一曲按钮"
+      - aiWaitFor: "切换到下一曲"
+      - aiAssert: "下一曲按钮正确响应"
+        errorMessage: "下一曲按钮响应异常"
+        name: "verify_next"
+

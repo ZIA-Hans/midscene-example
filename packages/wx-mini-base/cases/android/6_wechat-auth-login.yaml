@@ -1,0 +1,26 @@
+# 功能: 微信授权登录
+# 预置条件: 处于登录页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_6"
+  groupName: "微信授权登录"
+  generateReport: true
+  aiActContext: "处于登录页面，已勾选《用户服务协议》和《隐私协议》，选择微信账号登录"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "微信授权登录流程"
+    flow:
+      - aiWaitFor: "进入登录页面"
+      - aiTap: "勾选《用户服务协议》和《隐私协议》"
+      - aiTap: "登录页面选择'微信账号登录'"
+      - aiWaitFor: "登录处理完成"
+      - aiAssert: "已注册的账号直接登录，或未注册的账号以该微信号自动完成注册并登录"
+        errorMessage: "微信授权登录失败"
+        name: "verify_login_success"
+      - aiAssert: "登录成功后，同步账号信息"
+        errorMessage: "账号信息同步失败"
+        name: "verify_account_sync"
+

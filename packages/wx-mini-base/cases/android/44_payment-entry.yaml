@@ -1,0 +1,26 @@
+# 功能: 支付功能入口
+# 预置条件: 处于个人中心页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_44"
+  groupName: "支付"
+  generateReport: true
+  aiActContext: "处于个人中心页面，验证支付功能入口"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "验证支付功能入口"
+    flow:
+      - aiWaitFor: "处于个人中心页面"
+      - ai: "检查页面上的会员提示条"
+      - aiAssert: "非VIP账号显示'加入vip会员，畅听好书好课'小黄条，VIP账号显示'您已开通vip，点击可续费'小黄条"
+        errorMessage: "会员提示条显示异常"
+        name: "check_member_banner"
+      - ai: "根据账号类型点击对应的会员提示条"
+      - aiWaitFor: "跳转到会员页"
+      - aiAssert: "非VIP账号点击后跳转至会员页，VIP账号点击后显示SKU列表（SKU列表由运营自行确认，与后台配置一致）"
+        errorMessage: "会员页跳转异常或SKU列表显示异常"
+        name: "verify_member_page"
+

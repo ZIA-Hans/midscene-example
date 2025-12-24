@@ -1,0 +1,31 @@
+# 功能: 精品页面检查
+# 预置条件: 后台已配置精品页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_4"
+  groupName: "精品页面检查"
+  generateReport: true
+  aiActContext: "已进入小程序首页，后台已配置精品页面，需要验证精品页面元素"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "检查精品页面元素"
+    flow:
+      - aiWaitFor: "进入小程序首页"
+      - aiTap: "点击底部tab栏'精品'"
+      - aiWaitFor: "跳转到精品页面"
+      - aiAssert: "页面从上至下依次显示：专辑分类栏"
+        errorMessage: "专辑分类栏未显示"
+        name: "check_category_bar"
+      - aiAssert: "页面显示排行榜"
+        errorMessage: "排行榜未显示"
+        name: "check_ranking"
+      - aiAssert: "页面显示明星名家大咖墙"
+        errorMessage: "明星名家大咖墙未显示"
+        name: "check_celebrity_wall"
+      - aiAssert: "页面显示为你推荐"
+        errorMessage: "为你推荐未显示"
+        name: "check_recommendation"
+

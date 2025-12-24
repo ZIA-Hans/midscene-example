@@ -1,0 +1,22 @@
+# 功能: 未登录账号纯单购专辑跳转登录
+# 预置条件: 账号未登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_27"
+  groupName: "纯单购专辑登录跳转"
+  generateReport: true
+  aiActContext: "账号未登录，点击纯单购专辑音频后验证跳转到登录页面"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "未登录账号点击纯单购专辑音频"
+    flow:
+      - aiWaitFor: "账号未登录"
+      - ai: "点击付费音频"
+      - aiWaitFor: "页面跳转"
+      - aiAssert: "跳转至登录页面"
+        errorMessage: "未跳转到登录页面"
+        name: "verify_login_redirect"
+

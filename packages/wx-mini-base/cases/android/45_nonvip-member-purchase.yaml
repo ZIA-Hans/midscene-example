@@ -1,0 +1,27 @@
+# 功能: 非VIP会员购买
+# 预置条件: 处于会员页
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_45"
+  groupName: "非VIP会员购买"
+  generateReport: true
+  aiActContext: "非VIP账号已登录，进入个人中心点击'加入vip会员，畅听好书好课'小黄条，购买1个月会员（或1年）"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "非VIP会员购买流程"
+    flow:
+      - aiWaitFor: "非VIP账号已登录"
+      - aiTap: "点击【我的】，进入个人中心"
+      - aiWaitFor: "进入个人中心页面"
+      - aiTap: "点击'加入vip会员，畅听好书好课'小黄条"
+      - aiWaitFor: "跳转到会员页"
+      - aiTap: "选择1个月会员（或1年）"
+      - aiTap: "点击购买按钮"
+      - aiWaitFor: "拉起支付"
+      - aiAssert: "拉起支付"
+        errorMessage: "未拉起支付"
+        name: "verify_payment_popup"
+

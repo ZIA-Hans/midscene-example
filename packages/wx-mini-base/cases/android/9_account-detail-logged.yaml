@@ -1,0 +1,45 @@
+# 功能: 已登录状态账号详情
+# 预置条件: 账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_9"
+  groupName: "已登录状态账号详情"
+  generateReport: true
+  aiActContext: "账号已登录，进入账号详情页，验证头像和tab栏功能"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "验证账号详情页"
+    flow:
+      - aiWaitFor: "账号已登录"
+      - aiTap: "点击【我的】，进入账号详情页"
+      - aiWaitFor: "进入账号详情页"
+      - aiAssert: "非vip账号显示'加入会员，畅听好书好课'小黄条，vip账号不显示"
+        errorMessage: "会员提示条显示异常"
+        name: "check_vip_banner"
+      - aiAssert: "头像显示正确（vip账号头像右下角有vip标识，非vip账号没有）"
+        errorMessage: "头像显示异常"
+        name: "check_avatar"
+      - aiTap: "点击tab栏的'订阅'"
+      - aiWaitFor: "内容切换"
+      - aiAssert: "下方内容切换为订阅内容"
+        errorMessage: "订阅tab切换失败"
+        name: "check_subscribe_tab"
+      - aiTap: "点击tab栏的'喜欢'"
+      - aiWaitFor: "内容切换"
+      - aiAssert: "下方内容切换为喜欢内容"
+        errorMessage: "喜欢tab切换失败"
+        name: "check_like_tab"
+      - aiTap: "点击tab栏的'已购'"
+      - aiWaitFor: "内容切换"
+      - aiAssert: "下方内容切换为已购内容"
+        errorMessage: "已购tab切换失败"
+        name: "check_purchased_tab"
+      - aiTap: "点击tab栏的'历史'"
+      - aiWaitFor: "内容切换"
+      - aiAssert: "下方内容切换为历史内容"
+        errorMessage: "历史tab切换失败"
+        name: "check_history_tab"
+

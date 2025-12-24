@@ -1,0 +1,34 @@
+# 功能: 既是vip又是整集购买专辑播放
+# 预置条件: VIP账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_22"
+  groupName: "VIP整集购买专辑播放"
+  generateReport: true
+  aiActContext: "VIP账号已登录，通过搜索找到既是vip又是整集购买的专辑并播放"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "播放VIP整集购买专辑音频"
+    flow:
+      - aiWaitFor: "VIP账号已登录并进入小程序首页"
+      - aiTap: "首页点击搜索框"
+      - aiInput: "62740698"
+        locate: "在搜索框中输入"
+      - aiTap: "点击'AI搜索'按钮"
+      - aiWaitFor: "显示搜索结果"
+      - aiTap: "点击'专辑'tab栏"
+      - aiWaitFor: "显示专辑列表"
+      - aiTap: "点击第一个专辑进入专辑详情页"
+      - aiWaitFor: "进入专辑详情页"
+      - aiScroll:
+          direction: "down"
+          scrollType: "singleAction"
+      - aiTap: "向下寻找有vip标识的一个音频并点击"
+      - aiWaitFor: "跳转到播放页"
+      - aiAssert: "正常跳转，可播放"
+        errorMessage: "VIP音频播放失败"
+        name: "verify_vip_play"
+

@@ -1,0 +1,42 @@
+# 功能: 首页定制检查
+# 预置条件: 后台已配置首页
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_2"
+  groupName: "页面定制"
+  generateReport: true
+  aiActContext: "后台已配置首页，需要验证首页组成元素是否正确显示"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "检查首页定制元素"
+    flow:
+      - aiWaitFor: "进入小程序首页"
+      - ai: 关闭所有弹层和弹窗
+      - aiAssert: "页面显示搜索栏+搜索按钮"
+        errorMessage: "搜索栏未显示"
+        name: "check_search_bar"
+      - aiAssert: "页面显示内容分类tab栏"
+        errorMessage: "内容分类tab栏未显示"
+        name: "check_category_tab"
+      - aiAssert: "页面显示广告banner"
+        errorMessage: "广告banner未显示"
+        name: "check_banner"
+      - aiAssert: "页面显示'有声剧场'内容区域，该区域包含标题'有声剧场'、子标签栏（热门精品、个人成长、曲艺杂谈等）以及排名列表（显示排名数字和音频剧封面）"
+        errorMessage: "有声剧场排行榜区域未显示"
+        name: "check_ranking_tab"
+      - ai: 找到亲子乐园，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'亲子乐园'内容模块（位于有声剧场区域下方，是一个独立的板块，包含标题'亲子乐园'和描述文字'不伤眼涨知识,跟孩子共成长'，以及多个内容卡片）"
+        errorMessage: "亲子乐园独立模块未显示"
+        name: "check_list_1"
+      - ai: 找到热门推荐，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'热门推荐'内容模块（包含标题和'换一批'按钮）"
+        errorMessage: "热门推荐独立模块未显示"
+        name: "check_list_2"
+      - ai: 找到猜你喜欢，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'猜你喜欢'内容模块（是一个独立的推荐板块）"
+        errorMessage: "猜你喜欢独立模块未显示"
+        name: "check_list_3"
+

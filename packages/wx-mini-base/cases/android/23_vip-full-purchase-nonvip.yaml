@@ -1,0 +1,36 @@
+# 功能: 非VIP账号点击VIP整集购买音频购买流程
+# 预置条件: 非VIP账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_23"
+  groupName: "VIP整集购买流程"
+  generateReport: true
+  aiActContext: "非VIP账号已登录，点击既是vip又是整集购买的音频后验证购买流程"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "非VIP账号VIP整集购买流程"
+    flow:
+      - aiWaitFor: "非VIP账号已登录"
+      - ai: "点击vip音频"
+      - aiWaitFor: "弹出选择购买方式的半浮层"
+      - aiAssert: "点击vip音频后弹出选择购买方式的半浮层"
+        errorMessage: "未弹出购买方式选择半浮层"
+        name: "verify_purchase_option_popup"
+      - aiTap: "点击'整张专辑'"
+      - aiWaitFor: "跳转到订单页"
+      - aiAssert: "点击'整张专辑'，跳转到订单页"
+        errorMessage: "未跳转到订单页"
+        name: "verify_order_page"
+      - aiKeyboardPress: "Back"
+      - aiWaitFor: "返回上一页"
+      - ai: "再次点击vip音频"
+      - aiWaitFor: "弹出选择购买方式的半浮层"
+      - aiTap: "点击'购vip畅听'"
+      - aiWaitFor: "弹出vip的sku半浮层"
+      - aiAssert: "点击'购vip畅听'，后会弹出vip的sku半浮层"
+        errorMessage: "未弹出vip的sku半浮层"
+        name: "verify_vip_sku_popup"
+

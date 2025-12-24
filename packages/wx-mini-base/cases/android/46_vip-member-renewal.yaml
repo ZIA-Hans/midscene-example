@@ -1,0 +1,27 @@
+# 功能: VIP会员续费
+# 预置条件: 处于会员页
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_46"
+  groupName: "VIP会员续费"
+  generateReport: true
+  aiActContext: "VIP账号已登录，进入个人中心点击'您已开通vip，点击可续费'小黄条，购买1个月会员（或1年）"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "VIP会员续费流程"
+    flow:
+      - aiWaitFor: "VIP账号已登录"
+      - aiTap: "点击【我的】，进入个人中心"
+      - aiWaitFor: "进入个人中心页面"
+      - aiTap: "点击'您已开通vip，点击可续费'小黄条"
+      - aiWaitFor: "显示会员页或SKU列表"
+      - aiTap: "选择1个月会员（或1年）"
+      - aiTap: "点击购买按钮"
+      - aiWaitFor: "拉起支付"
+      - aiAssert: "拉起支付"
+        errorMessage: "未拉起支付"
+        name: "verify_payment_popup"
+

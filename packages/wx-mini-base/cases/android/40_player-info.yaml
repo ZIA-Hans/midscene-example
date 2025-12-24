@@ -1,0 +1,28 @@
+# 功能: 播放信息
+# 预置条件: 处于播放器页面
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_40"
+  groupName: "播放信息"
+  generateReport: true
+  aiActContext: "处于播放器页面，检查播放信息元素"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "检查播放信息"
+    flow:
+      - aiWaitFor: "处于播放器页面"
+      - aiAssert: "展示专辑封面"
+        errorMessage: "专辑封面未显示"
+        name: "check_album_cover"
+      - aiAssert: "展示音频名称"
+        errorMessage: "音频名称未显示"
+        name: "check_audio_name"
+      - aiTap: "点击音频列表按钮"
+      - aiWaitFor: "弹出音频列表半浮层"
+      - aiAssert: "展示音频列表按钮，点击可弹出音频列表半浮层"
+        errorMessage: "音频列表按钮未显示或点击后未弹出半浮层"
+        name: "check_audio_list_button"
+

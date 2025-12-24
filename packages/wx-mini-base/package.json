@@ -1,0 +1,12 @@
+{
+  "name": "@midscene/wx-mini-base",
+  "version": "1.0.0",
+  "description": "wx-mini-base 测试用例包",
+  "private": true,
+  "scripts": {
+    "test": "midscene cases",
+    "test:android": "midscene cases/android",
+    "test:ios": "midscene cases/ios",
+    "test:web": "midscene cases/web"
+  }
+}

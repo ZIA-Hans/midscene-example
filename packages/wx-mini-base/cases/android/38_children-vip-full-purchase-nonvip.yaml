@@ -1,0 +1,48 @@
+# 功能: 非VIP账号儿童VIP整集购买专辑购买流程
+# 预置条件: 非VIP账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_38"
+  groupName: "儿童VIP整集购买流程"
+  generateReport: true
+  aiActContext: "非VIP账号已登录，通过搜索找到既是儿童vip又是整集购买的专辑并验证购买流程"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "非VIP账号儿童VIP整集购买流程"
+    flow:
+      - aiWaitFor: "非VIP账号已登录并进入小程序首页"
+      - aiTap: "首页点击搜索框"
+      - aiInput: "81517466"
+        locate: "在搜索框中输入"
+      - aiTap: "点击'AI搜索'按钮"
+      - aiWaitFor: "显示搜索结果"
+      - aiTap: "点击'专辑'tab栏"
+      - aiWaitFor: "显示专辑列表"
+      - aiTap: "点击第一个专辑进入专辑详情页"
+      - aiWaitFor: "进入专辑详情页"
+      - aiScroll:
+          direction: "down"
+          scrollType: "singleAction"
+      - aiTap: "向下寻找有vip标识的一个音频并点击"
+      - aiWaitFor: "弹出选择购买方式的半浮层"
+      - aiAssert: "点击vip音频后弹出选择购买方式的半浮层"
+        errorMessage: "未弹出购买方式选择半浮层"
+        name: "verify_purchase_option_popup"
+      - aiTap: "点击'整张专辑'"
+      - aiWaitFor: "跳转到订单页"
+      - aiAssert: "点击'整张专辑'，跳转到订单页"
+        errorMessage: "未跳转到订单页"
+        name: "verify_order_page"
+      - aiKeyboardPress: "Back"
+      - aiWaitFor: "返回上一页"
+      - ai: "再次点击vip音频"
+      - aiWaitFor: "弹出选择购买方式的半浮层"
+      - aiTap: "点击'购vip畅听'"
+      - aiWaitFor: "弹出vip的sku半浮层"
+      - aiAssert: "点击'购vip畅听'，后会弹出vip的sku半浮层"
+        errorMessage: "未弹出vip的sku半浮层"
+        name: "verify_vip_sku_popup"
+

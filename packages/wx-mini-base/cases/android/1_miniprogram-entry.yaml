@@ -1,0 +1,26 @@
+# 功能: 从微信小程序的入口进入小程序
+# 预置条件: 已启动微信
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_1"
+  groupName: "小程序入口"
+  generateReport: true
+  aiActContext: "已启动微信，需要从微信小程序入口进入喜马拉雅小程序"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "从微信小程序入口进入小程序"
+    flow:
+      - aiTap: "点击微信进入到首页"
+      # - aiWaitFor: "跳转至小程序首页"
+      # - aiScroll:
+      #     direction: "down"
+      #     scrollType: "singleAction"
+      - aiTap: "点击搜索"
+      - aiInput: "喜马拉雅"
+        locate: "在搜索框中输入"
+      - ai: "点击喜马拉雅小程序(不是开发版)"
+      - aiWaitFor: "进入喜马拉雅小程序首页"
+

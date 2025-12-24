@@ -1,0 +1,41 @@
+# 功能: 未登录状态页面展示
+# 预置条件: 已启动微信
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_5"
+  groupName: "登录"
+  generateReport: true
+  aiActContext: "已启动微信，通过微信小程序图标进入首页，验证未登录状态下的页面元素展示"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "验证未登录状态页面元素"
+    flow:
+      - aiWaitFor: "通过微信小程序图标进入首页"
+      - aiAssert: "展示未登录时的页面，页面元素包括：搜索栏+搜索按钮"
+        errorMessage: "搜索栏未显示"
+        name: "check_search_bar"
+      - aiAssert: "页面显示内容分类tab栏"
+        errorMessage: "内容分类tab栏未显示"
+        name: "check_category_tab"
+      - aiAssert: "页面显示广告banner"
+        errorMessage: "广告banner未显示"
+        name: "check_banner"
+      - aiAssert: "页面显示登录小黄条"
+        errorMessage: "登录小黄条未显示"
+        name: "check_login_banner"
+      - aiAssert: "页面显示排行榜tab栏"
+        errorMessage: "排行榜tab栏未显示"
+        name: "check_ranking_tab"
+      - aiAssert: "页面显示听单1：亲子乐园"
+        errorMessage: "听单1未显示"
+        name: "check_list_1"
+      - aiAssert: "页面显示听单2：热门推荐+换一批按钮"
+        errorMessage: "听单2未显示"
+        name: "check_list_2"
+      - aiAssert: "页面显示听单3：猜你喜欢"
+        errorMessage: "听单3未显示"
+        name: "check_list_3"
+

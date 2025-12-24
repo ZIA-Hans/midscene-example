@@ -1,0 +1,26 @@
+# 功能: 登录状态保留
+# 预置条件: 账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_10"
+  groupName: "登录状态保留"
+  generateReport: true
+  aiActContext: "账号已登录且未退出状态下，重新进入微信小程序，验证登录状态和播放记录保留"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "验证登录状态保留"
+    flow:
+      - aiWaitFor: "账号已登录"
+      - ai: "退出微信小程序（不退出登录）"
+      - ai: "重新进入微信小程序"
+      - aiWaitFor: "进入小程序首页"
+      - aiAssert: "保留登录状态"
+        errorMessage: "登录状态未保留"
+        name: "verify_login_state"
+      - aiAssert: "最近播放仍显示退出页面前的记录"
+        errorMessage: "播放记录未保留"
+        name: "verify_play_history"
+

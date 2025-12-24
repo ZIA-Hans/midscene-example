@@ -41,16 +41,25 @@ alwaysApply: true
 
 | 产品线 | 平台配置 | 生成用例数量 | 文件命名规则 |
 |--------|----------|-------------|-------------|
-| 抖音小程序 | android / ios | 2个 | `<用例名>-android.yaml`, `<用例名>-ios.yaml` |
-| 喜马拉雅穿戴App | android / ios | 2个 | `<用例名>-android.yaml`, `<用例名>-ios.yaml` |
-| 通用会员SDK | web | 1个 | `<用例名>.yaml` |
+| 抖音小程序 | android / ios | 2个 | `<序号>_<用例名>-android.yaml`, `<序号>_<用例名>-ios.yaml` |
+| 微信小程序 | android | 1个 | `<序号>_<用例名>.yaml` |
+| 喜马拉雅穿戴App | android / ios | 2个 | `<序号>_<用例名>-android.yaml`, `<序号>_<用例名>-ios.yaml` |
+| 通用会员SDK | web | 1个 | `<序号>_<用例名>.yaml` |
 
 ### 2. 文件命名规范
 
-- **多平台产品线**: `<用例名>-<platform>.yaml`
-  - 示例: `account-detail-android.yaml`, `account-detail-ios.yaml`
-- **单平台产品线**: `<用例名>.yaml`
-  - 示例: `vip-purchase.yaml`
+**统一格式**: `<用例序号>_<用例名>.yaml` 或 `<用例序号>_<用例名>-<platform>.yaml`
+
+**规则说明**：
+- **用例序号**: MD 文档中用例的顺序编号（如 `## 1. Case_1` 中的 `1`）
+- **用例名**: 使用小写字母和连字符（kebab-case），反映测试功能
+- **platform**: 多平台产品线需要添加平台后缀
+
+**命名示例**：
+- **多平台产品线**: `<序号>_<用例名>-<platform>.yaml`
+  - 示例: `1_account-detail-android.yaml`, `1_account-detail-ios.yaml`
+- **单平台产品线**: `<序号>_<用例名>.yaml`
+  - 示例: `6_wx-auth-login.yaml`, `12_free-audio-play.yaml`
 
 ### 3. 平台配置差异
 

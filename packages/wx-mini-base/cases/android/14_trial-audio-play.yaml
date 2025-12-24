@@ -1,0 +1,24 @@
+# 功能: 试听音频播放
+# 预置条件: 非VIP账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_14"
+  groupName: "试听音频播放"
+  generateReport: true
+  aiActContext: "非VIP账号已登录，从首页进入vip专辑并播放试听音频"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "播放试听音频"
+    flow:
+      - aiWaitFor: "非VIP账号已登录并进入小程序首页"
+      - aiTap: "首页点击vip专辑'大奉打更人|头陀渊领衔多有有声剧|畅听全集|...'进入专辑详情页"
+      - aiWaitFor: "进入专辑详情页"
+      - aiTap: "专辑详情页中点击有试听标识的音频"
+      - aiWaitFor: "跳转到播放页"
+      - aiAssert: "正常跳转，可播放"
+        errorMessage: "试听音频播放失败"
+        name: "verify_trial_play"
+

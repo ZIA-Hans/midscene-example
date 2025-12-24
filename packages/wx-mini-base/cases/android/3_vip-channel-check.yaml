@@ -1,0 +1,28 @@
+# 功能: vip频道页面检查
+# 预置条件: 后台已配置vip频道
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_3"
+  groupName: "vip频道页面检查"
+  generateReport: true
+  aiActContext: "已进入小程序首页，后台已配置vip频道，需要验证vip频道页面元素"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "检查vip频道页面元素"
+    flow:
+      - aiWaitFor: "进入小程序首页"
+      - aiTap: "点击底部tab栏'vip频道'"
+      - aiWaitFor: "跳转到vip频道页面"
+      - aiAssert: "页面从上至下依次显示：个人信息栏"
+        errorMessage: "个人信息栏未显示"
+        name: "check_personal_info"
+      - aiAssert: "页面显示排行榜"
+        errorMessage: "排行榜未显示"
+        name: "check_ranking"
+      - aiAssert: "页面显示专辑分类tab栏"
+        errorMessage: "专辑分类tab栏未显示"
+        name: "check_album_category"
+

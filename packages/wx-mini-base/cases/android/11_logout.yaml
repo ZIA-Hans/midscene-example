@@ -1,0 +1,27 @@
+# 功能: 退出登录
+# 预置条件: 账号已登录
+
+agent:
+  testId: "WeChat_Mini_Program_Basic_11"
+  groupName: "退出登录"
+  generateReport: true
+  aiActContext: "账号已登录，通过设置页面切换账号，验证退出登录功能"
+
+android:
+  deviceId: "${ANDROID_DEVICE_ID}"
+
+tasks:
+  - name: "退出登录流程"
+    flow:
+      - aiWaitFor: "账号已登录"
+      - aiTap: "点击右上角的设置按钮进入设置页面"
+      - aiWaitFor: "进入设置页面"
+      - aiTap: "点击切换账号跳转到登录页"
+      - aiWaitFor: "跳转到登录页"
+      - aiKeyboardPress: "Back"
+      - aiKeyboardPress: "Back"
+      - aiWaitFor: "返回到个人详情页"
+      - aiAssert: "账号退出登录状态，页面更新为未登录页面"
+        errorMessage: "退出登录失败，页面未更新为未登录状态"
+        name: "verify_logout"
+
