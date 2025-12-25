@@ -5,6 +5,8 @@ agent:
   testId: "WeChat_Mini_Program_Basic_10"
   groupName: "登录状态保留"
   generateReport: true
+  cache:
+    id: "login_state_retention"
   aiActContext: "账号已登录且未退出状态下，重新进入微信小程序，验证登录状态和播放记录保留"
 
 android:
@@ -23,4 +25,5 @@ tasks:
       - aiAssert: "最近播放仍显示退出页面前的记录"
         errorMessage: "播放记录未保留"
         name: "verify_play_history"
+
 

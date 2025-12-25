@@ -1,0 +1,15 @@
+midsceneVersion: 1.0.2-beta-20251219034434.0
+cacheId: logout
+caches:
+  - type: plan
+    prompt: 返回到个人详情页
+    yamlWorkflow: |
+      tasks:
+        - name: 返回到个人详情页
+          flow:
+            - aiTap: ''
+              locate: 页面左上角的返回箭头图标
+            - aiTap: ''
+              locate: 设置页面左上角的返回箭头图标
+            - aiTap: ''
+              locate: ‘我的’页面上方的‘登录/注册’文字区域，包含头像和文字

@@ -8,17 +8,18 @@ agent:
   aiActContext: "账号已登录，从首页进入免费专辑并播放免费音频"
 
 android:
-  deviceId: "${ANDROID_DEVICE_ID}"
+  deviceId: "10.13.16.68:5555"
 
 tasks:
   - name: "播放免费音频"
     flow:
       - aiWaitFor: "账号已登录并进入小程序首页"
-      - aiTap: "首页点击免费专辑'摸金天师【第一季】（紫襟演播）'进入专辑详情页"
+      - ai: "首页点击免费专辑'摸金天师【第一季】（紫襟演播）'进入专辑详情页"
       - aiWaitFor: "进入专辑详情页"
       - aiTap: "点击免费音频'《摸金天师》第001章 百辟刀'"
       - aiWaitFor: "跳转到播放页"
       - aiAssert: "正常跳转播放页，正常播放音频"
         errorMessage: "播放页跳转失败或音频未正常播放"
         name: "verify_play_success"
+
 

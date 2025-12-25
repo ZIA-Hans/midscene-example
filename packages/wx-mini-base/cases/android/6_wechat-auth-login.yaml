@@ -13,6 +13,9 @@ android:
 tasks:
   - name: "微信授权登录流程"
     flow:
+      - aiTap: "点击我的"
+      - aiWaitFor: "进入我的页面"
+      - aiTap: "点击登录"
       - aiWaitFor: "进入登录页面"
       - aiTap: "勾选《用户服务协议》和《隐私协议》"
       - aiTap: "登录页面选择'微信账号登录'"
@@ -23,4 +26,5 @@ tasks:
       - aiAssert: "登录成功后，同步账号信息"
         errorMessage: "账号信息同步失败"
         name: "verify_account_sync"
+
 

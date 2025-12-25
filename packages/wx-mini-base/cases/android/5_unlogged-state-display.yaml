@@ -26,16 +26,19 @@ tasks:
       - aiAssert: "页面显示登录小黄条"
         errorMessage: "登录小黄条未显示"
         name: "check_login_banner"
-      - aiAssert: "页面显示排行榜tab栏"
-        errorMessage: "排行榜tab栏未显示"
+      - aiAssert: "页面显示'有声剧场'内容区域，该区域包含标题'有声剧场'、子标签栏（热门精品、个人成长、曲艺杂谈等）以及排名列表（显示排名数字和音频剧封面）"
+        errorMessage: "有声剧场排行榜区域未显示"
         name: "check_ranking_tab"
-      - aiAssert: "页面显示听单1：亲子乐园"
-        errorMessage: "听单1未显示"
+      - ai: 找到亲子乐园，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'亲子乐园'内容模块（位于有声剧场区域下方，是一个独立的板块，包含标题'亲子乐园'和描述文字'不伤眼涨知识,跟孩子共成长'，以及多个内容卡片）"
+        errorMessage: "亲子乐园独立模块未显示"
         name: "check_list_1"
-      - aiAssert: "页面显示听单2：热门推荐+换一批按钮"
-        errorMessage: "听单2未显示"
+      - ai: 找到热门推荐，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'热门推荐'内容模块（包含标题和'换一批'按钮）"
+        errorMessage: "热门推荐独立模块未显示"
         name: "check_list_2"
-      - aiAssert: "页面显示听单3：猜你喜欢"
-        errorMessage: "听单3未显示"
+      - ai: 找到猜你喜欢，如果找不到则滚动找到
+      - aiAssert: "页面显示独立的'猜你喜欢'内容模块（是一个独立的推荐板块）"
+        errorMessage: "猜你喜欢独立模块未显示"
         name: "check_list_3"
 
