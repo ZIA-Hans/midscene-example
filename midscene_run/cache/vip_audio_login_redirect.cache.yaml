@@ -1,0 +1,21 @@
+midsceneVersion: 1.0.3
+cacheId: vip_audio_login_redirect
+caches:
+  - type: plan
+    prompt: 切换选集范围到200集以后
+    yamlWorkflow: |
+      tasks:
+        - name: 切换选集范围到200集以后
+          flow:
+            - aiTap: ''
+              locate: 右上角的‘选集’按钮
+            - aiTap: ''
+              locate: 201-220选集按钮
+  - type: plan
+    prompt: 找到专辑详情页中点击有vip标识的音频并点击
+    yamlWorkflow: |
+      tasks:
+        - name: 找到专辑详情页中点击有vip标识的音频并点击
+          flow:
+            - aiTap: ''
+              locate: 带有VIP标识的第216集音频条目，包含“大奉打更人 第216集 监守自盗”文字及VIP标识

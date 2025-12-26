@@ -6,6 +6,8 @@ agent:
   groupName: "VIP音频登录跳转"
   generateReport: true
   aiActContext: "账号未登录，点击VIP音频后验证跳转到登录页面"
+  cache:
+    id: "vip_audio_login_redirect"
 
 android:
   deviceId: "${ANDROID_DEVICE_ID}"
@@ -14,9 +16,12 @@ tasks:
   - name: "未登录账号点击VIP音频"
     flow:
       - aiWaitFor: "账号未登录"
-      - ai: "点击vip音频"
-      - aiWaitFor: "页面跳转"
+      - ai: "点击vip专辑'大奉打更人|头陀渊领衔多有有声剧|畅听全集|...'进入专辑详情页并选择一个vip音频"
+      - aiWaitFor: "进入专辑详情页"
+      - ai: "切换选集范围到200集以后"
+      - ai: "找到专辑详情页中点击有vip标识的音频并点击"
       - aiAssert: "跳转至登录页面"
         errorMessage: "未跳转到登录页面"
         name: "verify_login_redirect"
+
 

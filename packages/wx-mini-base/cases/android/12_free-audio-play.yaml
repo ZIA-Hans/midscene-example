@@ -8,7 +8,7 @@ agent:
   aiActContext: "账号已登录，从首页进入免费专辑并播放免费音频"
 
 android:
-  deviceId: "10.13.16.68:5555"
+  deviceId: "${ANDROID_DEVICE_ID}"
 
 tasks:
   - name: "播放免费音频"
